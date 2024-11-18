@@ -1,0 +1,38 @@
+id: NET Remoting
+
+info:
+  name: .Net Remoting URI Leak
+  author: OxOffsecHunter
+  severity: medium
+  description: |
+    The upload module finder
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id: CVE-2024-1380
+    epss-score: 0.00043
+    epss-percentile: 0.0866
+    cpe: cpe:2.3:a:relevanssi:relevanssi:*:*:*:*:wordpress:*:*:*
+  metadata:
+    verified: true
+    max-request: 1
+    fofa-query: "/wp-content/plugins/relevanssi/"
+    product: relevanssi
+    vendor: relevanssi
+  tags: cve,cve2024,wp,wordpress,wp-plugin,relevanssi,exposure
+
+http:
+  - raw:
+      - |
+        GET /RemoteApplicationMetadata.rem?wsdl HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: text/xml
+
+        
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200'
+          - 'contains_all(body, "remote")'
+        condition: and
